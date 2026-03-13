@@ -83,3 +83,4 @@ npm run build
 - The UI keeps both layouts available from the same data source to satisfy the bonus view requirement.
 # patient-directory
 # patient-dirrectory-mechinetest
+# patient-dirrectory-mechinetest
