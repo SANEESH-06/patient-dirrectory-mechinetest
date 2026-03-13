@@ -1,43 +1,84 @@
-# Next.js Frontend Assignment
+# Patient Directory Assignment
 
-A comprehensive single-page web application built with Next.js (App Router), TypeScript, and TailwindCSS to view and manage patient records.
+A single-page patient directory built with Next.js App Router, TypeScript, and Tailwind CSS. The app reads from a local `data.json` file through a Route Handler and presents the data in both card and row layouts with search, filters, sorting, pagination, loading states, and error handling.
 
-## Features Added
+## Stack
 
-* **Local API Implementation:** Created an internal Route Handler (`app/api/data/route.ts`) to serve records from `data.json` with support for server-side search, filtering, sorting, and pagination.
-* **Dual View Architecture:** Implemented both required views:
-   * **Card-based View:** A grid of beautiful, responsive cards displaying patient summaries, avatars, and contact information.
-   * **Row-based Table View:** A clean data table layout for dense information viewing.
-* **Advanced Data Handling:**
-   * Dynamic Search with debouncing for optimal performance.
-   * Multi-select Filtering (by Medical Issue).
-   * Sorting capabilities (Ascending/Descending by ID, Name, or Age).
-   * Robust Pagination matching the backend API logic.
-* **Modern UI/UX:** 
-   * Fully responsive across desktop, tablet, and mobile browsers.
-   * Smooth animations and transitions using Tailwind CSS.
-   * Graceful fallback UI states (empty results, loading spinners, error states).
-   * Auto-generated avatars (via `ui-avatars.com`) for missing profile pictures.
-* **Clean Code Structure:** 
-   * Separation of concerns: API logic, presentation components, state management wrapper.
-   * Strict TypeScript typing (e.g., `Patient` interface).
+- Next.js 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Lucide React
 
-## Getting Started
+## What is implemented
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+- Local API endpoint at `app/api/data/route.ts`
+- Shared patient types used by both API and frontend
+- API-backed pagination with `page`, `limit`, and `offset` support
+- Search across patient name, issue, and contact fields
+- Multi-select filtering by medical issue
+- Age-range filtering
+- Sorting by patient ID, name, and age
+- Card view and row view
+- Debounced search input
+- Loading, empty, and error states
+- Responsive layout
 
-2. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
+## Project structure
 
-3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `app/page.tsx`: page entry
+- `components/DataViewer.tsx`: stateful client container
+- `components/FilterBar.tsx`: search, filter, sort, and page-size controls
+- `components/CardView.tsx`: card layout
+- `components/RowView.tsx`: table layout
+- `components/Pagination.tsx`: custom pagination
+- `components/PatientAvatar.tsx`: image/fallback avatar handling
+- `app/api/data/route.ts`: local JSON API
+- `lib/patients.ts`: API query parsing and dataset processing
+- `types/patient.ts`: shared TypeScript models
 
-## Architecture Decisions
+## API query parameters
 
-- **Component Structure:** `DataViewer` acts as the smart container managing state and fetching data from the API. It passes data to dumb presentation components (`CardView`, `RowView`, `Pagination`, `FilterBar`).
-- **Data Fetching:** Handled via a robust `useEffect` and `fetch` pattern with proper loading and error states, ensuring a snappy client-side feel backed by a lightweight server route.
-- **Styling:** Vanilla TailwindCSS for rapid, consistent styling without heavy UI library dependencies. Used Lucide-React for clean SVG iconography.
+`GET /api/data`
+
+Supported query params:
+
+- `page`
+- `limit`
+- `offset`
+- `search`
+- `filter_issues`
+- `filter_age_min`
+- `filter_age_max`
+- `sort_by`
+- `sort_order`
+
+Example:
+
+```bash
+/api/data?page=2&limit=12&search=zoe&filter_issues=fever,rash&filter_age_min=18&sort_by=patient_name&sort_order=asc
+```
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+## Verification
+
+```bash
+npm run lint
+npm run build
+```
+
+## Architecture notes
+
+- The API is responsible for filtering, sorting, and pagination so the UI stays thin and assignment-friendly.
+- The frontend keeps local view state only, then requests exactly the slice of data it needs.
+- Shared config and types remove duplication between the route handler and the client.
+- The UI keeps both layouts available from the same data source to satisfy the bonus view requirement.
+# patient-directory
